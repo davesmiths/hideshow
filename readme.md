@@ -8,7 +8,7 @@ Usage
 -----
 ```
 <p>Para 1</p>
-<div data-hideshow="thing">
+<div data-hideshow>
 	<p>Para 2</p>
 </div>
 ```
