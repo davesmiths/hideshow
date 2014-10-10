@@ -1,8 +1,7 @@
 hideshow
 =========
 
-**A simple and flexible show hide plugin **  
-
+**A simple and flexible show hide plugin**
 
 
 Usage
