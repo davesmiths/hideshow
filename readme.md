@@ -9,11 +9,11 @@ Usage
 -----
 ```
 
-<p>In June 2013 the ‘Benefactors’ Roll’ was unveiled in Trinity’s Dining Hall as permanent testament to the generosity of individuals, trusts and corporations to the college through the ages. The first five names on the list commemorate Trinity’s founding benefactors: Queen Elizabeth I, Dublin Corporation, Sir Turlough O’Neill, Sir Hugh Magennis, and James Ussher. These names, representing English monarchy, Gaelic chieftains and Dublin citizens, indicate the inclusive, diverse origins of Ireland’s leading university. </p>
-<p>In 1592 citizens of Dublin petitioned Queen Elizabeth I for a charter to open a university in their city. Dublin Corporation donated lands and, from all around Ireland, wealthy citizens gave generously in the knowledge that the college would benefit the whole country. The charter established an autonomous self- governing college for ‘the education, training and instruction of youths and students’ and the early scholars instilled a commitment to originality in scholarship and research. <span data-hideshow-for="thing" data-hideshow-hide="<em>Show less</em>" data-hideshow-show="<strong>Read more</strong>"></span></p>
+<p>Para 1</p>
+<p>Para 2 <span data-hideshow-for="thing" data-hideshow-hide="<em>Show less</em>" data-hideshow-show="<strong>Read more</strong>"></span></p>
 <div data-hideshow="thing">
-	<p>Over the centuries Trinity has played a central role in Ireland’s cultural and intellectual development. Once a leading representative of the Reformation, it became in the eighteenth century a beacon of the European Enlightenment, and in the nineteenth century a pioneer in the study of the natural sciences in the island. Throughout its history, in nurturing a sense of scholarly community, Trinity has held firm to its founding values: freedom and independence of thought, respect for individual talents, and commitment to critical scholarship and innovative research. </p>
-	<p>All of the college’s many pioneering actions have flowed from this firm foundation. A focus on multidisciplinary education meant that Trinity was among the first universities worldwide to teach medicine, modern languages, and engineering, and more recently was a pioneer in Ireland in the study of pharmacy, genetics and nanotechnology. Commitment to social inclusion ensured that Trinity was at the forefront of drives to admit women students and to establish access programmes for students from disadvantaged socio-economic groups. In 1973 it became the first (and still the only) university in Ireland to reconsecrate its college chapel for use by all Christian traditions.</p>
+	<p>Para 3</p>
+	<p>Para 4.</p>
 </div>
 
 <span data-hideshow-for="thing" data-hideshow-hide="<em>Show less</em>" data-hideshow-show="<strong>Read more</strong>"></span>
@@ -45,7 +45,7 @@ When the image is cropped this will keep focus to the horizontal center and vert
 With JavaScript:
 ```
 $(function() {
-    $('.thing').imagefill({align:'third/50'});    
+    $('.thing').imagefill({align:'third/50'});
 });
 ```
 
@@ -115,7 +115,7 @@ CSS
 }
 ```
 
-    
+
 ###Custom wrapper class
 The wrapper div gets a standard class of imagefill-wrapper. The following adds an extra custom class of "wop" to the wrapper
 
