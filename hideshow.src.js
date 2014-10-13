@@ -11,7 +11,8 @@
 		show_data_str = hideshow_str + '-show',
 		hideshow_selector_str = '[data-'+hideshow_str+']',
 		hide_selector_str = '[data-'+hide_data_str+']',
-		show_selector_str = '[data-'+show_data_str+']'
+		show_selector_str = '[data-'+show_data_str+']',
+		hsIDCount = 0
 	;
 
 	$.fn.hideshow = function(o) {
@@ -50,9 +51,8 @@
 
 				$els.each(function() {
 
-					var $el = $(this)
-						,show
-						,hide
+					var $el = $(this),
+						$placeholder
 					;
 
 					// If el has the data-hideshow-hide|show attribute but no value is set, use the default
@@ -63,18 +63,27 @@
 						$el.data(show_data_str, showHTML);
 					}
 
-					// Show only the hide HTML
-					if (!$el.data(hide_data_str) || $el.data(show_data_str)) {
-						$el.html($el.data(show_data_str));
+					// Apply the HTML
+					$el.html($el.data(show_data_str));
+
+					// Hide the hide
+					if ($el.data(hide_data_str)) {
+						$placeholder = $el.before('<span data-hideshow-placeholder></span>').prev();
+						$el.detach().data('hideshow-detached', true).data('hideshow-placeholder', $placeholder);
 					}
 
 				});
 
 			}
+			else {
+				hideshowID = hideshow_str + hideshow_str + hsIDCount;
+				hsIDCount += 1;
+				$hs.data(hideshow_str, hideshowID);
+			}
 
 			// If no elements were found that point to the panel, insert a hideshow link before the panel
 			if ($els === undefined || $els.length === 0) {
-				$els = $(linkHTML).insertBefore($wrap).find('a').data(show_data_str,showHTML).data(hide_data_str, hideHTML);
+				$els = $(linkHTML).insertBefore($wrap).find('a').data(show_data_str,showHTML).data(hide_data_str, hideHTML).data(hideshow_str+'-for', hideshowID);
 			}
 
 			// Handle click events
@@ -82,24 +91,49 @@
 
 				// If the panel is currently hidden, change each linked element to use the show HTML
 				if ($hs.data(hide_data_str)) {
+
 					$els.each(function() {
-						var $el = $(this);
+
+						var $el = $(this),
+							$placeholder
+						;
+
 						if ($el.data(hide_data_str)) {
+							if ($el.data('hideshow-detached')) {
+								$el.data('hideshow-placeholder').replaceWith($el);
+							}
 							$el.html($el.data(hide_data_str));
 						}
 						else {
-							$el.html('');
+							$placeholder = $el.before('<span data-hideshow-placeholder></span>').prev();
+							$el.detach().data('hideshow-detached', true).data('hideshow-placeholder', $placeholder);
 						}
+
 					});
 
 					// Update the panel
 					$hs.data(hide_data_str, false).removeClass(hide_data_str).addClass(show_data_str);
+
 				}
 				// Otherwise change each linked element to use the hide HTML
 				else {
+
 					$els.each(function() {
-						var $el = $(this);
-						$el.html($el.data(show_data_str) ? $el.data(show_data_str) : '');
+
+						var $el = $(this),
+							$placeholder;
+
+						if ($el.data(show_data_str)) {
+							if ($el.data('hideshow-detached')) {
+								$el.data('hideshow-placeholder').replaceWith($el);
+							}
+							$el.html($el.data(show_data_str));
+						}
+						else {
+							$placeholder = $el.before('<span data-hideshow-placeholder></span>').prev();
+							$el.detach().data('hideshow-detached', true).data('hideshow-placeholder', $placeholder);
+						}
+
 					});
 					$hs.data(hide_data_str, true).removeClass(show_data_str).addClass(hide_data_str);
 				}
