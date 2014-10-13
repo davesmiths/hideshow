@@ -11,17 +11,24 @@
         });
     </script>
     <style>
+
+
+
+
         /* The CSS may need some tweaking regarding margins because overflow hidden prevents margins collapsing, but here is the core CSS */
         [data-hideshow].hideshow-ready {max-height:0;overflow:hidden;}
         [data-hideshow].hideshow-show {max-height:inherit;}
 
-        /* Here some negative margins are used to even out the spacing */
+
+
+
+        /* Negative margins are used to even out spacing */
         .t1 [data-hideshow].hideshow-ready {max-height:0;overflow:hidden;margin:-1em 0 0 0;}
         .t1 [data-hideshow].hideshow-show {max-height:inherit;margin:-1em 0;}
-        /*
-        overflow:visible ensures margins collapse, this is what's wanted
-        for the demo, but won't always be
-        */
+
+
+
+        /* CSS animations */
         .t2 [data-hideshow].hideshow-ready {max-height:0;overflow:hidden;opacity:1;margin:-1em 0 0 0;}
         .t2 [data-hideshow].hideshow-show {max-height:inherit;opacity:1;margin:-1em 0;
             -webkit-transition: all 0.25s ease-out;
@@ -38,6 +45,9 @@
             transition: all 0.25s ease-out;
         }
 
+
+
+        /* Just a copy of above */
         .t3 [data-hideshow].hideshow-ready {max-height:0;overflow:hidden;opacity:1;margin:-1em 0 0 0;}
         .t3 [data-hideshow].hideshow-show {max-height:inherit;opacity:1;margin:-1em 0;
             -webkit-transition: all 0.25s ease-out;
@@ -53,7 +63,11 @@
             -o-transition: all 0.25s ease-out;
             transition: all 0.25s ease-out;
         }
+
+
+        /* Page styles */
         body {padding:100px 150px 350px 100px;}
+
     </style>
 </head>
 <body>
@@ -69,7 +83,7 @@
     </div>
     <h3>Custom show hide link</h3>
     <p>To Sherlock Holmes she is always THE woman. I have seldom heard him mention her under any other name. In his eyes she eclipses and predominates the whole of her sex. It was not that he felt any emotion akin to love for Irene Adler. All emotions, and that one particularly, were abhorrent to his cold, precise but admirably balanced mind. He was, I take it, the most perfect reasoning and observing machine that the world has seen, but as a lover he would have placed himself in a false position. He never spoke of the softer passions, save with a gibe and a sneer. They were admirable things for the observer—excellent for drawing the veil from men's motives and actions. But for the trained reasoner to admit such intrusions into his own delicate and finely adjusted temperament was to introduce a distracting factor which might throw a doubt upon all his mental results. Grit in a sensitive instrument, or a crack in one of his own high-power lenses, would not be more disturbing than a strong emotion in a nature such as his. And yet there was but one woman to him, and that woman was the late Irene Adler, of dubious and questionable memory.
-        <span data-hideshow-for="thing2" data-hideshow-hide="<em>Show less</em>" data-hideshow-show="<strong>Read more</strong>"></span>
+        <a href="" data-hideshow-for="thing2" data-hideshow-hide="<em>Show less</em>" data-hideshow-show="<strong>Read more</strong>"></a>
     </p>
     <div data-hideshow="thing2">
         <p>I had seen little of Holmes lately. My marriage had drifted us away from each other. My own complete happiness, and the home-centred interests which rise up around the man who first finds himself master of his own establishment, were sufficient to absorb all my attention, while Holmes, who loathed every form of society with his whole Bohemian soul, remained in our lodgings in Baker Street, buried among his old books, and alternating from week to week between cocaine and ambition, the drowsiness of the drug, and the fierce energy of his own keen nature. He was still, as ever, deeply attracted by the study of crime, and occupied his immense faculties and extraordinary powers of observation in following out those clues, and clearing up those mysteries which had been abandoned as hopeless by the official police. From time to time I heard some vague account of his doings: of his summons to Odessa in the case of the Trepoff murder, of his clearing up of the singular tragedy of the Atkinson brothers at Trincomalee, and finally of the mission which he had accomplished so delicately and successfully for the reigning family of Holland. Beyond these signs of his activity, however, which I merely shared with all the readers of the daily press, I knew little of my former friend and companion.</p>
@@ -87,7 +101,7 @@
     </div>
     <h3>Custom show hide link</h3>
     <p>To Sherlock Holmes she is always THE woman. I have seldom heard him mention her under any other name. In his eyes she eclipses and predominates the whole of her sex. It was not that he felt any emotion akin to love for Irene Adler. All emotions, and that one particularly, were abhorrent to his cold, precise but admirably balanced mind. He was, I take it, the most perfect reasoning and observing machine that the world has seen, but as a lover he would have placed himself in a false position. He never spoke of the softer passions, save with a gibe and a sneer. They were admirable things for the observer—excellent for drawing the veil from men's motives and actions. But for the trained reasoner to admit such intrusions into his own delicate and finely adjusted temperament was to introduce a distracting factor which might throw a doubt upon all his mental results. Grit in a sensitive instrument, or a crack in one of his own high-power lenses, would not be more disturbing than a strong emotion in a nature such as his. And yet there was but one woman to him, and that woman was the late Irene Adler, of dubious and questionable memory.
-        <span data-hideshow-for="thing1" data-hideshow-hide="<em>Show less</em>" data-hideshow-show="<strong>Read more</strong>"></span>
+        <a href="" data-hideshow-for="thing1" data-hideshow-hide="<em>Show less</em>" data-hideshow-show="<strong>Read more</strong>"></a>
     </p>
     <div data-hideshow="thing1">
         <p>I had seen little of Holmes lately. My marriage had drifted us away from each other. My own complete happiness, and the home-centred interests which rise up around the man who first finds himself master of his own establishment, were sufficient to absorb all my attention, while Holmes, who loathed every form of society with his whole Bohemian soul, remained in our lodgings in Baker Street, buried among his old books, and alternating from week to week between cocaine and ambition, the drowsiness of the drug, and the fierce energy of his own keen nature. He was still, as ever, deeply attracted by the study of crime, and occupied his immense faculties and extraordinary powers of observation in following out those clues, and clearing up those mysteries which had been abandoned as hopeless by the official police. From time to time I heard some vague account of his doings: of his summons to Odessa in the case of the Trepoff murder, of his clearing up of the singular tragedy of the Atkinson brothers at Trincomalee, and finally of the mission which he had accomplished so delicately and successfully for the reigning family of Holland. Beyond these signs of his activity, however, which I merely shared with all the readers of the daily press, I knew little of my former friend and companion.</p>
@@ -105,7 +119,7 @@
     </div>
     <h3>Custom show hide link</h3>
     <p>To Sherlock Holmes she is always THE woman. I have seldom heard him mention her under any other name. In his eyes she eclipses and predominates the whole of her sex. It was not that he felt any emotion akin to love for Irene Adler. All emotions, and that one particularly, were abhorrent to his cold, precise but admirably balanced mind. He was, I take it, the most perfect reasoning and observing machine that the world has seen, but as a lover he would have placed himself in a false position. He never spoke of the softer passions, save with a gibe and a sneer. They were admirable things for the observer—excellent for drawing the veil from men's motives and actions. But for the trained reasoner to admit such intrusions into his own delicate and finely adjusted temperament was to introduce a distracting factor which might throw a doubt upon all his mental results. Grit in a sensitive instrument, or a crack in one of his own high-power lenses, would not be more disturbing than a strong emotion in a nature such as his. And yet there was but one woman to him, and that woman was the late Irene Adler, of dubious and questionable memory.
-        <span data-hideshow-for="thing0" data-hideshow-hide="<em>Show less</em>" data-hideshow-show="<strong>Read more</strong>"></span>
+        <a href="" data-hideshow-for="thing0" data-hideshow-hide="<em>Show less</em>" data-hideshow-show="<strong>Read more</strong>"></a>
     </p>
     <div data-hideshow="thing0">
         <p>I had seen little of Holmes lately. My marriage had drifted us away from each other. My own complete happiness, and the home-centred interests which rise up around the man who first finds himself master of his own establishment, were sufficient to absorb all my attention, while Holmes, who loathed every form of society with his whole Bohemian soul, remained in our lodgings in Baker Street, buried among his old books, and alternating from week to week between cocaine and ambition, the drowsiness of the drug, and the fierce energy of his own keen nature. He was still, as ever, deeply attracted by the study of crime, and occupied his immense faculties and extraordinary powers of observation in following out those clues, and clearing up those mysteries which had been abandoned as hopeless by the official police. From time to time I heard some vague account of his doings: of his summons to Odessa in the case of the Trepoff murder, of his clearing up of the singular tragedy of the Atkinson brothers at Trincomalee, and finally of the mission which he had accomplished so delicately and successfully for the reigning family of Holland. Beyond these signs of his activity, however, which I merely shared with all the readers of the daily press, I knew little of my former friend and companion.</p>
@@ -121,16 +135,16 @@
     <h2>Multiple show hide links</h2>
 
     <p>To Sherlock Holmes she is always THE woman. I have seldom heard him mention her under any other name. In his eyes she eclipses and predominates the whole of her sex. It was not that he felt any emotion akin to love for Irene Adler. All emotions, and that one particularly, were abhorrent to his cold, precise but admirably balanced mind. He was, I take it, the most perfect reasoning and observing machine that the world has seen, but as a lover he would have placed himself in a false position. He never spoke of the softer passions, save with a gibe and a sneer. They were admirable things for the observer—excellent for drawing the veil from men's motives and actions. But for the trained reasoner to admit such intrusions into his own delicate and finely adjusted temperament was to introduce a distracting factor which might throw a doubt upon all his mental results. Grit in a sensitive instrument, or a crack in one of his own high-power lenses, would not be more disturbing than a strong emotion in a nature such as his. And yet there was but one woman to him, and that woman was the late Irene Adler, of dubious and questionable memory.
-        <span data-hideshow-for="thing3" data-hideshow-show="<strong>Read more 1</strong>"></span>
+        <a href="" data-hideshow-for="thing3" data-hideshow-show="<strong>Read more 1</strong>"></a>
     </p>
     <div data-hideshow="thing3">
         <p>I had seen little of Holmes lately. My marriage had drifted us away from each other. My own complete happiness, and the home-centred interests which rise up around the man who first finds himself master of his own establishment, were sufficient to absorb all my attention, while Holmes, who loathed every form of society with his whole Bohemian soul, remained in our lodgings in Baker Street, buried among his old books, and alternating from week to week between cocaine and ambition, the drowsiness of the drug, and the fierce energy of his own keen nature. He was still, as ever, deeply attracted by the study of crime, and occupied his immense faculties and extraordinary powers of observation in following out those clues, and clearing up those mysteries which had been abandoned as hopeless by the official police. From time to time I heard some vague account of his doings: of his summons to Odessa in the case of the Trepoff murder, of his clearing up of the singular tragedy of the Atkinson brothers at Trincomalee, and finally of the mission which he had accomplished so delicately and successfully for the reigning family of Holland. Beyond these signs of his activity, however, which I merely shared with all the readers of the daily press, I knew little of my former friend and companion.</p>
         <p>One night—it was on the twentieth of March, 1888—I was returning from a journey to a patient (for I had now returned to civil practice), when my way led me through Baker Street. As I passed the well-remembered door, which must always be associated in my mind with my wooing, and with the dark incidents of the Study in Scarlet, I was seized with a keen desire to see Holmes again, and to know how he was employing his extraordinary powers. His rooms were brilliantly lit, and, even as I looked up, I saw his tall, spare figure pass twice in a dark silhouette against the blind. He was pacing the room swiftly, eagerly, with his head sunk upon his chest and his hands clasped behind him. To me, who knew his every mood and habit, his attitude and manner told their own story. He was at work again. He had risen out of his drug-created dreams and was hot upon the scent of some new problem. I rang the bell and was shown up to the chamber which had formerly been in part my own.</p>
-        <p><span data-hideshow-for="thing3" data-hideshow-hide="<em>Show less inside hideshow</em>"></span>&nbsp;</p>
+        <p><a href="" data-hideshow-for="thing3" data-hideshow-hide="<em>Show less inside hideshow</em>"></a>&nbsp;</p>
     </div>
     <p>After hideshow</p>
-    <p><span data-hideshow-for="thing3" data-hideshow-show="<strong>Read more 2</strong>"></span> <span data-hideshow-for="thing3" data-hideshow-hide="<em>Show less 2</em>"></span></p>
-    <p>Using the default text: <span data-hideshow-for="thing3" data-hideshow-show></span> <span data-hideshow-for="thing3" data-hideshow-hide></span></p>
+    <p><a href="" data-hideshow-for="thing3" data-hideshow-show="<strong>Read more 2</strong>"></a> <a href="" data-hideshow-for="thing3" data-hideshow-hide="<em>Show less 2</em>"></a></p>
+    <p>Using the default text: <a href="" data-hideshow-for="thing3" data-hideshow-show></a> <a href="" data-hideshow-for="thing3" data-hideshow-hide></a></p>
 </div>
 
 

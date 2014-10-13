@@ -40,15 +40,14 @@
 			$hs.data(hideshow_hide_str, true).addClass(hideshow_str+'-ready');
 
 			if (hideshowID) {
+
 				// Look for links for it
 				$links = $('[data-'+hideshow_str+'-for="'+hideshowID+'"]');
+
 				$links.each(function() {
+
 					var $link = $(this)
 					;
-
-					if ($link.is('a') === false) {
-						$link = $link.wrap('<a href=""></a>');
-					}
 
 					if ($link.is('[data-'+hideshow_hide_str+']') && !$link.data(hideshow_hide_str)) {
 						$link.data(hideshow_hide_str, hideHTML);
@@ -85,6 +84,7 @@
 				}
 
 				return false;
+
 			});
 
 		});
@@ -93,10 +93,10 @@
 
 	};
 
-	// To help cope with web fonts loading and resizing windows, though I haven't put any window.resize stuff in here
-	// Simple call $('[data-hideshow]').hideshow('resized'); to run
-	resized = function() {
 
+	// To help cope with web fonts loading and resizing windows, though I haven't put any window.resize stuff in here
+	// Call $('[data-hideshow]').hideshow('resized'); to run
+	resized = function() {
 
 		$(this).each(function() {
 
