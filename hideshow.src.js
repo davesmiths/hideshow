@@ -7,8 +7,11 @@
 		max_height_str = 'max-height',
 		padding_str = 'padding',
 		hideshow_str = 'hideshow',
-		hideshow_hide_str = hideshow_str + '-hide',
-		hideshow_show_str = hideshow_str + '-show'
+		hide_data_str = hideshow_str + '-hide',
+		show_data_str = hideshow_str + '-show',
+		hideshow_selector_str = '[data-'+hideshow_str+']',
+		hide_selector_str = '[data-'+hide_data_str+']',
+		show_selector_str = '[data-'+show_data_str+']'
 	;
 
 	$.fn.hideshow = function(o) {
@@ -24,11 +27,11 @@
 		$this.each(function() {
 
 			var $hs = $(this),
-				showHTML = $hs.data(hideshow_show_str) || 'Show more',
-				hideHTML = $hs.data(hideshow_hide_str) || 'Hide',
+				showHTML = $hs.data(show_data_str) || 'Show more',
+				hideHTML = $hs.data(hide_data_str) || 'Hide',
 				linkHTML = '<p><a href="">' + showHTML + '</a></p>',
 				hideshowID = $hs.data(hideshow_str),
-				$links,
+				$els,
 				$wrap
 			;
 
@@ -37,50 +40,68 @@
 			$wrap.css(max_height_str, $wrap.outerHeight()-2);
 			$wrap.css(padding_str,'');
 
-			$hs.data(hideshow_hide_str, true).addClass(hideshow_str+'-ready');
+			$hs.data(hide_data_str, true).addClass(hideshow_str+'-ready');
 
+			// Does the hideshow panel have an id
 			if (hideshowID) {
 
-				// Look for links for it
-				$links = $('[data-'+hideshow_str+'-for="'+hideshowID+'"]');
+				// Get elements that point to the panel
+				$els = $('[data-'+hideshow_str+'-for="'+hideshowID+'"]');
 
-				$links.each(function() {
+				$els.each(function() {
 
-					var $link = $(this)
+					var $el = $(this)
+						,show
+						,hide
 					;
 
-					if ($link.is('[data-'+hideshow_hide_str+']') && !$link.data(hideshow_hide_str)) {
-						$link.data(hideshow_hide_str, hideHTML);
+					// If el has the data-hideshow-hide|show attribute but no value is set, use the default
+					if ($el.is(hide_selector_str) && !$el.data(hide_data_str)) {
+						$el.data(hide_data_str, hideHTML);
 					}
-					if ($link.is('[data-'+hideshow_show_str+']') && !$link.data(hideshow_show_str)) {
-						$link.data(hideshow_show_str, showHTML);
+					if ($el.is(show_selector_str) && !$el.data(show_data_str)) {
+						$el.data(show_data_str, showHTML);
 					}
 
-					if (!$link.data(hideshow_hide_str) || $link.data(hideshow_show_str)) {
-						$link.html($link.data(hideshow_show_str));
+					// Show only the hide HTML
+					if (!$el.data(hide_data_str) || $el.data(show_data_str)) {
+						$el.html($el.data(show_data_str));
 					}
 
 				});
-			}
-			if ($links === undefined || $links.length === 0) {
-				$links = $(linkHTML).insertBefore($wrap).find('a').data(hideshow_show_str,showHTML).data(hideshow_hide_str, hideHTML);
+
 			}
 
-			$links.on('click', function() {
+			// If no elements were found that point to the panel, insert a hideshow link before the panel
+			if ($els === undefined || $els.length === 0) {
+				$els = $(linkHTML).insertBefore($wrap).find('a').data(show_data_str,showHTML).data(hide_data_str, hideHTML);
+			}
 
-				if ($hs.data(hideshow_hide_str)) {
-					$links.each(function() {
-						var $each = $(this);
-						$each.html($each.data(hideshow_hide_str) ? $each.data(hideshow_hide_str) : '');
+			// Handle click events
+			$els.on('click', function() {
+
+				// If the panel is currently hidden, change each linked element to use the show HTML
+				if ($hs.data(hide_data_str)) {
+					$els.each(function() {
+						var $el = $(this);
+						if ($el.data(hide_data_str)) {
+							$el.html($el.data(hide_data_str));
+						}
+						else {
+							$el.html('');
+						}
 					});
-					$hs.data(hideshow_hide_str, false).removeClass(hideshow_hide_str).addClass(hideshow_show_str);
+
+					// Update the panel
+					$hs.data(hide_data_str, false).removeClass(hide_data_str).addClass(show_data_str);
 				}
+				// Otherwise change each linked element to use the hide HTML
 				else {
-					$links.each(function() {
-						var $each = $(this);
-						$each.html($each.data(hideshow_show_str) ? $each.data(hideshow_show_str) : '');
+					$els.each(function() {
+						var $el = $(this);
+						$el.html($el.data(show_data_str) ? $el.data(show_data_str) : '');
 					});
-					$hs.data(hideshow_hide_str, true).removeClass(hideshow_show_str).addClass(hideshow_hide_str);
+					$hs.data(hide_data_str, true).removeClass(show_data_str).addClass(hide_data_str);
 				}
 
 				return false;
