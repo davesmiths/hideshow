@@ -37,7 +37,7 @@
 			$wrap.css(max_height_str, $wrap.outerHeight()-2);
 			$wrap.css(padding_str,'');
 
-			$hs.data(hideshow_hide_str, true).addClass(hideshow_str+'-primed');
+			$hs.data(hideshow_hide_str, true).addClass(hideshow_str+'-ready');
 
 			if (hideshowID) {
 				// Look for links for it

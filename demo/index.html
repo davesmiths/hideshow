@@ -12,17 +12,17 @@
     </script>
     <style>
         /* The CSS may need some tweaking regarding margins because overflow hidden prevents margins collapsing, but here is the core CSS */
-        [data-hideshow].hideshow-primed {max-height:0;overflow:hidden;}
+        [data-hideshow].hideshow-ready {max-height:0;overflow:hidden;}
         [data-hideshow].hideshow-show {max-height:inherit;}
 
         /* Here some negative margins are used to even out the spacing */
-        .t1 [data-hideshow].hideshow-primed {max-height:0;overflow:hidden;margin:-1em 0 0 0;}
+        .t1 [data-hideshow].hideshow-ready {max-height:0;overflow:hidden;margin:-1em 0 0 0;}
         .t1 [data-hideshow].hideshow-show {max-height:inherit;margin:-1em 0;}
         /*
         overflow:visible ensures margins collapse, this is what's wanted
         for the demo, but won't always be
         */
-        .t2 [data-hideshow].hideshow-primed {max-height:0;overflow:hidden;opacity:1;margin:-1em 0 0 0;}
+        .t2 [data-hideshow].hideshow-ready {max-height:0;overflow:hidden;opacity:1;margin:-1em 0 0 0;}
         .t2 [data-hideshow].hideshow-show {max-height:inherit;opacity:1;margin:-1em 0;
             -webkit-transition: all 0.25s ease-out;
             -moz-transition: all 0.25s ease-out;
@@ -38,7 +38,7 @@
             transition: all 0.25s ease-out;
         }
 
-        .t3 [data-hideshow].hideshow-primed {max-height:0;overflow:hidden;opacity:1;margin:-1em 0 0 0;}
+        .t3 [data-hideshow].hideshow-ready {max-height:0;overflow:hidden;opacity:1;margin:-1em 0 0 0;}
         .t3 [data-hideshow].hideshow-show {max-height:inherit;opacity:1;margin:-1em 0;
             -webkit-transition: all 0.25s ease-out;
             -moz-transition: all 0.25s ease-out;
