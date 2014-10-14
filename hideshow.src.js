@@ -7,6 +7,7 @@
 		max_height_str = 'max-height',
 		overflow_str = 'overflow',
 		hideshow_str = 'hideshow',
+		toggle_wrap_data_str = hideshow_str + '-toggle-wrap',
 		detached_hideshow_str = hideshow_str + '-detached',
 		hide_data_str = hideshow_str + '-hide',
 		show_data_str = hideshow_str + '-show',
@@ -14,6 +15,7 @@
 		hideshow_selector_str = '[data-'+hideshow_str+']',
 		hide_selector_str = '[data-'+hide_data_str+']',
 		show_selector_str = '[data-'+show_data_str+']',
+		toggle_wrap_selector_str = '[data-'+toggle_wrap_data_str+']',
 		hsIDCount = 0
 	;
 
@@ -29,54 +31,67 @@
 
 		$this.each(function() {
 
-			var $hs = $(this),
-				showHTML = $hs.data(show_data_str) || 'Show more',
-				hideHTML = $hs.data(hide_data_str) || 'Hide',
-				linkHTML = '<p><a href="">' + showHTML + '</a></p>',
-				hideshowID = $hs.data(hideshow_str),
-				$els,
+			var $panel = $(this),
+				showToggleHTML = $panel.data(show_data_str) || 'Show more',
+				hideToggleHTML = $panel.data(hide_data_str) || 'Hide',
+				toggleHTML = '<a href="">' + showToggleHTML + '</a>',
+				toggleWrapHTML = $panel.data(toggle_wrap_data_str) || '<p></p>',
+				hideshowID = $panel.data(hideshow_str),
+				$toggles,
 				$wrap
 			;
 
+
 			// Only apply hideshow if it hasn't been done previously
 			// This allows multiple calls to $('[data-hideshow]').hideshow(); and keeps things good
-			if ($hs.hasClass(hideshow_str+'-ready') === false) {
+			if ($panel.hasClass(hideshow_str+'-ready') === false) {
 
-				$wrap = $hs.wrap('<div class="'+hideshow_str+'-wrap"></div>').parent();
+				if ($panel.is(toggle_wrap_selector_str) && !$panel.data(toggle_wrap_data_str)) {
+					toggleWrapHTML = '';
+				}
 
+				// Wrap the panel, capture the panel height with margins uncollapsed
+				// and set its max-height to the panel height
+				$wrap = $panel.wrap('<div class="'+hideshow_str+'-wrap"></div>').parent();
 				$wrap.css(overflow_str,'hidden');
 				$wrap.css(max_height_str, $wrap.outerHeight());
 				$wrap.css(overflow_str,'');
 
-				$hs.data(hide_data_str, true).addClass(hideshow_str+'-ready');
+				// Add a ready class to the panel
+				$panel.data(hide_data_str, true).addClass(hideshow_str+'-ready');
 
-				// Does the hideshow panel have an id
+				// If the panel has an id
+				//		Check for toggles for the panel, set their HTML
+				//		and temporarily remove any hide toggles
+				// Else
+				//		There are no toggles for the panel, but
+				//		there will be so generate a panel id and apply to the panel
 				if (hideshowID) {
 
-					// Get elements that point to the panel
-					$els = $('[data-'+hideshow_str+'-for="'+hideshowID+'"]');
+					// Get any toggles for the panel
+					$toggles = $('[data-'+hideshow_str+'-for="'+hideshowID+'"]');
+					$toggles.each(function() {
 
-					$els.each(function() {
-
-						var $el = $(this),
+						var $toggle = $(this),
 							$placeholder
 						;
 
-						// If el has the data-hideshow-hide|show attribute but no value is set, use the default
-						if ($el.is(hide_selector_str) && !$el.data(hide_data_str)) {
-							$el.data(hide_data_str, hideHTML);
+						// If the toggle has the data-hideshow-hide|show attribute
+						// but no value is set, use the default HTML
+						if ($toggle.is(hide_selector_str) && !$toggle.data(hide_data_str)) {
+							$toggle.data(hide_data_str, hideToggleHTML);
 						}
-						if ($el.is(show_selector_str) && !$el.data(show_data_str)) {
-							$el.data(show_data_str, showHTML);
+						if ($toggle.is(show_selector_str) && !$toggle.data(show_data_str)) {
+							$toggle.data(show_data_str, showToggleHTML);
 						}
 
-						// Apply the HTML
-						$el.html($el.data(show_data_str));
+						// Apply the HTML to the toggle
+						$toggle.html($toggle.data(show_data_str));
 
-						// Hide the hide
-						if ($el.data(hide_data_str)) {
-							$placeholder = $el.before('<span data-'+placeholder_data_str+'></span>').prev();
-							$el.detach().data(detached_hideshow_str, true).data(placeholder_data_str, $placeholder);
+						// Temporarily remove hide only toggles
+						if ($toggle.data(hide_data_str) && !$toggle.data(show_data_str)) {
+							$placeholder = $toggle.before('<span data-'+placeholder_data_str+'></span>').prev();
+							$toggle.detach().data(detached_hideshow_str, true).data(placeholder_data_str, $placeholder);
 						}
 
 					});
@@ -85,64 +100,67 @@
 				else {
 					hideshowID = hideshow_str + hideshow_str + hsIDCount;
 					hsIDCount += 1;
-					$hs.data(hideshow_str, hideshowID);
+					$panel.data(hideshow_str, hideshowID);
 				}
 
-				// If no elements were found that point to the panel, insert a hideshow link before the panel
-				if ($els === undefined || $els.length === 0) {
-					$els = $(linkHTML).insertBefore($wrap).find('a').data(show_data_str,showHTML).data(hide_data_str, hideHTML).data(hideshow_str+'-for', hideshowID);
+				// If no toggles for the panel were found, insert
+				// a show/hide toggle before the panel
+				if ($toggles === undefined || $toggles.length === 0) {
+					$toggles = $(toggleHTML).insertBefore($wrap).wrapAll(toggleWrapHTML).data(show_data_str,showToggleHTML).data(hide_data_str, hideToggleHTML).data(hideshow_str+'-for', hideshowID);
 				}
 
-				// Handle click events
-				$els.on('click', function() {
+				// Handle toggle click events
+				$toggles.on('click', function() {
 
-					// If the panel is currently hidden, change each linked element to use the show HTML
-					if ($hs.data(hide_data_str)) {
+					// If the panel is currently hidden, change each toggle
+					// to use the show HTML or temporarily remove the toggle
+					if ($panel.data(hide_data_str)) {
 
-						$els.each(function() {
+						$toggles.each(function() {
 
-							var $el = $(this),
+							var $toggle = $(this),
 								$placeholder
 							;
 
-							if ($el.data(hide_data_str)) {
-								if ($el.data(detached_hideshow_str)) {
-									$el.data(placeholder_data_str).replaceWith($el);
+							if ($toggle.data(hide_data_str)) {
+								if ($toggle.data(detached_hideshow_str)) {
+									$toggle.data(placeholder_data_str).replaceWith($toggle);
 								}
-								$el.html($el.data(hide_data_str));
+								$toggle.html($toggle.data(hide_data_str));
 							}
 							else {
-								$placeholder = $el.before('<span data-'+placeholder_data_str+'></span>').prev();
-								$el.detach().data(detached_hideshow_str, true).data(placeholder_data_str, $placeholder);
+								$placeholder = $toggle.before('<span data-'+placeholder_data_str+'></span>').prev();
+								$toggle.detach().data(detached_hideshow_str, true).data(placeholder_data_str, $placeholder);
 							}
 
 						});
 
 						// Update the panel
-						$hs.data(hide_data_str, false).removeClass(hide_data_str).addClass(show_data_str);
+						$panel.data(hide_data_str, false).removeClass(hide_data_str).addClass(show_data_str);
 
 					}
-					// Otherwise change each linked element to use the hide HTML
+					// Otherwise change each toggle to use the hide HTML
+					// or temporarily remove the toggle
 					else {
 
-						$els.each(function() {
+						$toggles.each(function() {
 
-							var $el = $(this),
+							var $toggle = $(this),
 								$placeholder;
 
-							if ($el.data(show_data_str)) {
-								if ($el.data(detached_hideshow_str)) {
-									$el.data(placeholder_data_str).replaceWith($el);
+							if ($toggle.data(show_data_str)) {
+								if ($toggle.data(detached_hideshow_str)) {
+									$toggle.data(placeholder_data_str).replaceWith($toggle);
 								}
-								$el.html($el.data(show_data_str));
+								$toggle.html($toggle.data(show_data_str));
 							}
 							else {
-								$placeholder = $el.before('<span data-'+placeholder_data_str+'></span>').prev();
-								$el.detach().data(detached_hideshow_str, true).data(placeholder_data_str, $placeholder);
+								$placeholder = $toggle.before('<span data-'+placeholder_data_str+'></span>').prev();
+								$toggle.detach().data(detached_hideshow_str, true).data(placeholder_data_str, $placeholder);
 							}
 
 						});
-						$hs.data(hide_data_str, true).removeClass(show_data_str).addClass(hide_data_str);
+						$panel.data(hide_data_str, true).removeClass(show_data_str).addClass(hide_data_str);
 					}
 
 					return false;
@@ -158,19 +176,21 @@
 	};
 
 
-	// To help cope with web fonts loading and resizing windows, though I haven't put any window.resize stuff in here
-	// Call $('[data-hideshow]').hideshow('resized'); to run
+	// To help cope with web fonts loading and resizing windows, though I
+	// haven't put any window.resize stuff in here, call
+	// $('[data-hideshow]').hideshow('resized'); to recalculate the panel
+	// max height and apply to the wrap
 	resized = function() {
 
 		$(this).each(function() {
 
-			var $hs = $(this)
+			var $panel = $(this)
 			;
 
 			// Redo the maxheight on the wrapper
-			$hs.css(max_height_str, 'none');
-			$hs.parent().css(max_height_str, $hs.outerHeight());
-			$hs.css(max_height_str, '');
+			$panel.css(max_height_str, 'none');
+			$panel.parent().css(max_height_str, $panel.outerHeight());
+			$panel.css(max_height_str, '');
 
 		});
 
