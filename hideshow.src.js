@@ -5,10 +5,12 @@
 
 	var resized,
 		max_height_str = 'max-height',
-		padding_str = 'padding',
+		overflow_str = 'overflow',
 		hideshow_str = 'hideshow',
+		detached_hideshow_str = hideshow_str + '-detached',
 		hide_data_str = hideshow_str + '-hide',
 		show_data_str = hideshow_str + '-show',
+		placeholder_data_str = hideshow_str + '-placeholder',
 		hideshow_selector_str = '[data-'+hideshow_str+']',
 		hide_selector_str = '[data-'+hide_data_str+']',
 		show_selector_str = '[data-'+show_data_str+']',
@@ -41,9 +43,10 @@
 			if ($hs.hasClass(hideshow_str+'-ready') === false) {
 
 				$wrap = $hs.wrap('<div class="'+hideshow_str+'-wrap"></div>').parent();
-				$wrap.css(padding_str,'1px 0');
-				$wrap.css(max_height_str, $wrap.outerHeight()-2);
-				$wrap.css(padding_str,'');
+
+				$wrap.css(overflow_str,'hidden');
+				$wrap.css(max_height_str, $wrap.outerHeight());
+				$wrap.css(overflow_str,'');
 
 				$hs.data(hide_data_str, true).addClass(hideshow_str+'-ready');
 
@@ -72,8 +75,8 @@
 
 						// Hide the hide
 						if ($el.data(hide_data_str)) {
-							$placeholder = $el.before('<span data-hideshow-placeholder></span>').prev();
-							$el.detach().data('hideshow-detached', true).data('hideshow-placeholder', $placeholder);
+							$placeholder = $el.before('<span data-'+placeholder_data_str+'></span>').prev();
+							$el.detach().data(detached_hideshow_str, true).data(placeholder_data_str, $placeholder);
 						}
 
 					});
@@ -103,14 +106,14 @@
 							;
 
 							if ($el.data(hide_data_str)) {
-								if ($el.data('hideshow-detached')) {
-									$el.data('hideshow-placeholder').replaceWith($el);
+								if ($el.data(detached_hideshow_str)) {
+									$el.data(placeholder_data_str).replaceWith($el);
 								}
 								$el.html($el.data(hide_data_str));
 							}
 							else {
-								$placeholder = $el.before('<span data-hideshow-placeholder></span>').prev();
-								$el.detach().data('hideshow-detached', true).data('hideshow-placeholder', $placeholder);
+								$placeholder = $el.before('<span data-'+placeholder_data_str+'></span>').prev();
+								$el.detach().data(detached_hideshow_str, true).data(placeholder_data_str, $placeholder);
 							}
 
 						});
@@ -128,14 +131,14 @@
 								$placeholder;
 
 							if ($el.data(show_data_str)) {
-								if ($el.data('hideshow-detached')) {
-									$el.data('hideshow-placeholder').replaceWith($el);
+								if ($el.data(detached_hideshow_str)) {
+									$el.data(placeholder_data_str).replaceWith($el);
 								}
 								$el.html($el.data(show_data_str));
 							}
 							else {
-								$placeholder = $el.before('<span data-hideshow-placeholder></span>').prev();
-								$el.detach().data('hideshow-detached', true).data('hideshow-placeholder', $placeholder);
+								$placeholder = $el.before('<span data-'+placeholder_data_str+'></span>').prev();
+								$el.detach().data(detached_hideshow_str, true).data(placeholder_data_str, $placeholder);
 							}
 
 						});
