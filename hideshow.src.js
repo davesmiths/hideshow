@@ -36,61 +36,22 @@
 				$wrap
 			;
 
-			$wrap = $hs.wrap('<div class="'+hideshow_str+'-wrap"></div>').parent();
-			$wrap.css(padding_str,'1px 0');
-			$wrap.css(max_height_str, $wrap.outerHeight()-2);
-			$wrap.css(padding_str,'');
+			// Only apply hideshow if it hasn't been done previously
+			// This allows multiple calls to $('[data-hideshow]').hideshow(); and keeps things good
+			if ($hs.hasClass(hideshow_str+'-ready') === false) {
 
-			$hs.data(hide_data_str, true).addClass(hideshow_str+'-ready');
+				$wrap = $hs.wrap('<div class="'+hideshow_str+'-wrap"></div>').parent();
+				$wrap.css(padding_str,'1px 0');
+				$wrap.css(max_height_str, $wrap.outerHeight()-2);
+				$wrap.css(padding_str,'');
 
-			// Does the hideshow panel have an id
-			if (hideshowID) {
+				$hs.data(hide_data_str, true).addClass(hideshow_str+'-ready');
 
-				// Get elements that point to the panel
-				$els = $('[data-'+hideshow_str+'-for="'+hideshowID+'"]');
+				// Does the hideshow panel have an id
+				if (hideshowID) {
 
-				$els.each(function() {
-
-					var $el = $(this),
-						$placeholder
-					;
-
-					// If el has the data-hideshow-hide|show attribute but no value is set, use the default
-					if ($el.is(hide_selector_str) && !$el.data(hide_data_str)) {
-						$el.data(hide_data_str, hideHTML);
-					}
-					if ($el.is(show_selector_str) && !$el.data(show_data_str)) {
-						$el.data(show_data_str, showHTML);
-					}
-
-					// Apply the HTML
-					$el.html($el.data(show_data_str));
-
-					// Hide the hide
-					if ($el.data(hide_data_str)) {
-						$placeholder = $el.before('<span data-hideshow-placeholder></span>').prev();
-						$el.detach().data('hideshow-detached', true).data('hideshow-placeholder', $placeholder);
-					}
-
-				});
-
-			}
-			else {
-				hideshowID = hideshow_str + hideshow_str + hsIDCount;
-				hsIDCount += 1;
-				$hs.data(hideshow_str, hideshowID);
-			}
-
-			// If no elements were found that point to the panel, insert a hideshow link before the panel
-			if ($els === undefined || $els.length === 0) {
-				$els = $(linkHTML).insertBefore($wrap).find('a').data(show_data_str,showHTML).data(hide_data_str, hideHTML).data(hideshow_str+'-for', hideshowID);
-			}
-
-			// Handle click events
-			$els.on('click', function() {
-
-				// If the panel is currently hidden, change each linked element to use the show HTML
-				if ($hs.data(hide_data_str)) {
+					// Get elements that point to the panel
+					$els = $('[data-'+hideshow_str+'-for="'+hideshowID+'"]');
 
 					$els.each(function() {
 
@@ -98,49 +59,94 @@
 							$placeholder
 						;
 
+						// If el has the data-hideshow-hide|show attribute but no value is set, use the default
+						if ($el.is(hide_selector_str) && !$el.data(hide_data_str)) {
+							$el.data(hide_data_str, hideHTML);
+						}
+						if ($el.is(show_selector_str) && !$el.data(show_data_str)) {
+							$el.data(show_data_str, showHTML);
+						}
+
+						// Apply the HTML
+						$el.html($el.data(show_data_str));
+
+						// Hide the hide
 						if ($el.data(hide_data_str)) {
-							if ($el.data('hideshow-detached')) {
-								$el.data('hideshow-placeholder').replaceWith($el);
-							}
-							$el.html($el.data(hide_data_str));
-						}
-						else {
 							$placeholder = $el.before('<span data-hideshow-placeholder></span>').prev();
 							$el.detach().data('hideshow-detached', true).data('hideshow-placeholder', $placeholder);
 						}
 
 					});
 
-					// Update the panel
-					$hs.data(hide_data_str, false).removeClass(hide_data_str).addClass(show_data_str);
-
 				}
-				// Otherwise change each linked element to use the hide HTML
 				else {
-
-					$els.each(function() {
-
-						var $el = $(this),
-							$placeholder;
-
-						if ($el.data(show_data_str)) {
-							if ($el.data('hideshow-detached')) {
-								$el.data('hideshow-placeholder').replaceWith($el);
-							}
-							$el.html($el.data(show_data_str));
-						}
-						else {
-							$placeholder = $el.before('<span data-hideshow-placeholder></span>').prev();
-							$el.detach().data('hideshow-detached', true).data('hideshow-placeholder', $placeholder);
-						}
-
-					});
-					$hs.data(hide_data_str, true).removeClass(show_data_str).addClass(hide_data_str);
+					hideshowID = hideshow_str + hideshow_str + hsIDCount;
+					hsIDCount += 1;
+					$hs.data(hideshow_str, hideshowID);
 				}
 
-				return false;
+				// If no elements were found that point to the panel, insert a hideshow link before the panel
+				if ($els === undefined || $els.length === 0) {
+					$els = $(linkHTML).insertBefore($wrap).find('a').data(show_data_str,showHTML).data(hide_data_str, hideHTML).data(hideshow_str+'-for', hideshowID);
+				}
 
-			});
+				// Handle click events
+				$els.on('click', function() {
+
+					// If the panel is currently hidden, change each linked element to use the show HTML
+					if ($hs.data(hide_data_str)) {
+
+						$els.each(function() {
+
+							var $el = $(this),
+								$placeholder
+							;
+
+							if ($el.data(hide_data_str)) {
+								if ($el.data('hideshow-detached')) {
+									$el.data('hideshow-placeholder').replaceWith($el);
+								}
+								$el.html($el.data(hide_data_str));
+							}
+							else {
+								$placeholder = $el.before('<span data-hideshow-placeholder></span>').prev();
+								$el.detach().data('hideshow-detached', true).data('hideshow-placeholder', $placeholder);
+							}
+
+						});
+
+						// Update the panel
+						$hs.data(hide_data_str, false).removeClass(hide_data_str).addClass(show_data_str);
+
+					}
+					// Otherwise change each linked element to use the hide HTML
+					else {
+
+						$els.each(function() {
+
+							var $el = $(this),
+								$placeholder;
+
+							if ($el.data(show_data_str)) {
+								if ($el.data('hideshow-detached')) {
+									$el.data('hideshow-placeholder').replaceWith($el);
+								}
+								$el.html($el.data(show_data_str));
+							}
+							else {
+								$placeholder = $el.before('<span data-hideshow-placeholder></span>').prev();
+								$el.detach().data('hideshow-detached', true).data('hideshow-placeholder', $placeholder);
+							}
+
+						});
+						$hs.data(hide_data_str, true).removeClass(show_data_str).addClass(hide_data_str);
+					}
+
+					return false;
+
+				});
+
+			}
 
 		});
 

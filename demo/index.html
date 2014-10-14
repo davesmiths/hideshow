@@ -8,6 +8,9 @@
     <script>
         $(function() {
             $('[data-hideshow]').hideshow();
+            // Test multiple hideshow calls
+            // Multiple hideshow calls can be made; hideshow is only applied once per [data-hideshow] element
+            $('[data-hideshow]').hideshow();
         });
     </script>
     <style>
