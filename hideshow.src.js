@@ -114,7 +114,12 @@
 				// If no toggles for the panel were found, insert
 				// a show/hide toggle before the panel
 				if ($toggles === undefined || $toggles.length === 0) {
-					$toggles = $(generatedToggleHTML).insertAfter($panelWrap).wrapAll(generatedToggleWrapHTML).data(hideshow_str+'-for', hideshowID);
+					if ($panel.is('[data-hideshow-before]')) {
+						$toggles = $(generatedToggleHTML).insertBefore($panelWrap).wrapAll(generatedToggleWrapHTML).data(hideshow_str+'-for', hideshowID);
+					}
+					else {
+						$toggles = $(generatedToggleHTML).insertAfter($panelWrap).wrapAll(generatedToggleWrapHTML).data(hideshow_str+'-for', hideshowID);
+					}
 					if (!$panel.is(show_selector_str) && !$panel.is(hide_selector_str)) {
 						$toggles.data(show_data_str,showToggleHTML).data(hide_data_str, hideToggleHTML);
 					}

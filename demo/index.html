@@ -51,18 +51,18 @@
         /* CSS animations */
         .t2 [data-hideshow].hideshow-ready {max-height:0;overflow:hidden;opacity:1;margin:-1em 0 0 0;}
         .t2 [data-hideshow].hideshow-show {max-height:inherit;opacity:1;margin:-1em 0;
-            -webkit-transition: all 0.25s ease-out;
-            -moz-transition: all 0.25s ease-out;
-            -ms-transition: all 0.25s ease-out;
-            -o-transition: all 0.25s ease-out;
-            transition: all 0.25s ease-out;
+            -webkit-transition: all 1s ease-out;
+            -moz-transition: all 1s ease-out;
+            -ms-transition: all 1s ease-out;
+            -o-transition: all 1s ease-out;
+            transition: all 1s ease-out;
         }
         .t2 [data-hideshow].hideshow-hide {max-height:0;opacity:0;
-            -webkit-transition: all 0.25s ease-out;
-            -moz-transition: all 0.25s ease-out;
-            -ms-transition: all 0.25s ease-out;
-            -o-transition: all 0.25s ease-out;
-            transition: all 0.25s ease-out;
+            -webkit-transition: all 1s ease-out;
+            -moz-transition: all 1s ease-out;
+            -ms-transition: all 1s ease-out;
+            -o-transition: all 1s ease-out;
+            transition: all 1s ease-out;
         }
 
 
@@ -70,18 +70,18 @@
         /* Just a copy of above */
         .t3 [data-hideshow].hideshow-ready {max-height:0;overflow:hidden;opacity:1;margin:-1em 0 0 0;}
         .t3 [data-hideshow].hideshow-show {max-height:inherit;opacity:1;margin:-1em 0;
-            -webkit-transition: all 0.25s ease-out;
-            -moz-transition: all 0.25s ease-out;
-            -ms-transition: all 0.25s ease-out;
-            -o-transition: all 0.25s ease-out;
-            transition: all 0.25s ease-out;
+            -webkit-transition: all 1s ease-out;
+            -moz-transition: all 1s ease-out;
+            -ms-transition: all 1s ease-out;
+            -o-transition: all 1s ease-out;
+            transition: all 1s ease-out;
         }
         .t3 [data-hideshow].hideshow-hide {max-height:0;opacity:0;
-            -webkit-transition: all 0.25s ease-out;
-            -moz-transition: all 0.25s ease-out;
-            -ms-transition: all 0.25s ease-out;
-            -o-transition: all 0.25s ease-out;
-            transition: all 0.25s ease-out;
+            -webkit-transition: all 1s ease-out;
+            -moz-transition: all 1s ease-out;
+            -ms-transition: all 1s ease-out;
+            -o-transition: all 1s ease-out;
+            transition: all 1s ease-out;
         }
 
 
@@ -219,13 +219,35 @@ The showhide toggle is after the panel
 </pre>
 
 
-<h2>YouTube description</h2>
-<p>Published on Nov 5, 2013</p>
-<p>Catch up on 4oD: http://www.channel4.com/programmes/to...</p>
-<p>The sound of YES!</p>
+<div class="t2">
+
+<h2>YouTubeish descriptionish</h2>
+<p>
+    Published on Nov 5, 2013<br/>
+    Catch up on 4oD: http://www.channel4.com/programmes/to...</br>
+    The sound of YES!
+</p>
 <div data-hideshow>
     <p>Category: Entertainment<br />
     License: Standard YouTube License</p>
+</div>
+
+<h2>YouTubeish commentish</h2>
+<div data-hideshow data-hideshow-before data-hideshow-show="View all n replies" data-hideshow-hide="Hide replies">
+    <div>Bob: Dumb ass!</div>
+    <div>Sue: No you're the dumb ass!</div>
+    <div>Bob: No you really are the dumb ass!</div>
+    <div>Fred: You're both dumb asses!</div>
+    <div>Bob: I'm a dumb ass!</div>
+</div>
+
+<h2>Facebookish statusish</h2>
+<p>I went to the supermarket
+<span data-hideshow data-hideshow-show="... See More">
+    and turned back to find Elmo brushing his teeth and the cookie monster eating a cookie
+</span>
+</p>
+
 </div>
 
 
