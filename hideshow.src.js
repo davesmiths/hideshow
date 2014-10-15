@@ -16,12 +16,16 @@
 		hide_selector_str = '[data-'+hide_data_str+']',
 		show_selector_str = '[data-'+show_data_str+']',
 		toggle_wrap_selector_str = '[data-'+toggle_wrap_data_str+']',
+		placeholder_selector_str = '[data-'+placeholder_data_str + ']',
 		hsIDCount = 0
 	;
 
 	$.fn.hideshow = function(o) {
 
-		var $this = $(this)
+		var $this = $(this),
+			showToggleHTMLDefault = o && o.show ? o.show : 'Show more',
+			hideToggleHTMLDefault = o && o.hide ? o.hide : 'Show less',
+			generatedToggleWrapHTMLDefault = o && o.toggleWrap ? o.toggleWrap : '<p></p>'
 		;
 
 		if (o === 'resized') {
@@ -32,30 +36,34 @@
 		$this.each(function() {
 
 			var $panel = $(this),
-				showToggleHTML = $panel.data(show_data_str) || 'Show more',
-				hideToggleHTML = $panel.data(hide_data_str) || 'Hide',
-				toggleHTML = '<a href="">' + showToggleHTML + '</a>',
-				toggleWrapHTML = $panel.data(toggle_wrap_data_str) || '<p></p>',
+				showToggleHTML = $panel.data(show_data_str) || showToggleHTMLDefault,
+				hideToggleHTML = $panel.data(hide_data_str) || hideToggleHTMLDefault,
+				generatedToggleHTML = '<a href="">' + showToggleHTML + '</a>',
+				generatedToggleWrapHTML = '',
+				panelIsBlock = $panel.css('display') === 'block',
 				hideshowID = $panel.data(hideshow_str),
 				$toggles,
-				$wrap
+				$panelWrap,
+				panelWrapTag = panelIsBlock ? 'div' : 'span'
 			;
-
+			if (panelIsBlock) {
+				generatedToggleWrapHTML = $panel.data(toggle_wrap_data_str) || generatedToggleWrapHTMLDefault;
+			}
 
 			// Only apply hideshow if it hasn't been done previously
 			// This allows multiple calls to $('[data-hideshow]').hideshow(); and keeps things good
 			if ($panel.hasClass(hideshow_str+'-ready') === false) {
 
 				if ($panel.is(toggle_wrap_selector_str) && !$panel.data(toggle_wrap_data_str)) {
-					toggleWrapHTML = '';
+					generatedToggleWrapHTML = '';
 				}
 
 				// Wrap the panel, capture the panel height with margins uncollapsed
 				// and set its max-height to the panel height
-				$wrap = $panel.wrap('<div class="'+hideshow_str+'-wrap"></div>').parent();
-				$wrap.css(overflow_str,'hidden');
-				$wrap.css(max_height_str, $wrap.outerHeight());
-				$wrap.css(overflow_str,'');
+				$panelWrap = $panel.wrap('<'+panelWrapTag+' class="'+hideshow_str+'-wrap"></'+panelWrapTag+'>').parent();
+				$panelWrap.css(overflow_str,'hidden');
+				$panelWrap.css(max_height_str, $panelWrap.outerHeight());
+				$panelWrap.css(overflow_str,'');
 
 				// Add a ready class to the panel
 				$panel.data(hide_data_str, true).addClass(hideshow_str+'-ready');
@@ -106,7 +114,18 @@
 				// If no toggles for the panel were found, insert
 				// a show/hide toggle before the panel
 				if ($toggles === undefined || $toggles.length === 0) {
-					$toggles = $(toggleHTML).insertBefore($wrap).wrapAll(toggleWrapHTML).data(show_data_str,showToggleHTML).data(hide_data_str, hideToggleHTML).data(hideshow_str+'-for', hideshowID);
+					$toggles = $(generatedToggleHTML).insertAfter($panelWrap).wrapAll(generatedToggleWrapHTML).data(hideshow_str+'-for', hideshowID);
+					if (!$panel.is(show_selector_str) && !$panel.is(hide_selector_str)) {
+						$toggles.data(show_data_str,showToggleHTML).data(hide_data_str, hideToggleHTML);
+					}
+					else {
+						if ($panel.is(show_selector_str)) {
+							$toggles.data(show_data_str,showToggleHTML);
+						}
+						if ($panel.is(hide_selector_str)) {
+							$toggles.data(hide_data_str, hideToggleHTML);
+						}
+					}
 				}
 
 				// Handle toggle click events
@@ -115,7 +134,6 @@
 					// If the panel is currently hidden, change each toggle
 					// to use the show HTML or temporarily remove the toggle
 					if ($panel.data(hide_data_str)) {
-
 						$toggles.each(function() {
 
 							var $toggle = $(this),
@@ -185,11 +203,15 @@
 		$(this).each(function() {
 
 			var $panel = $(this)
+				,$placeholders
 			;
 
 			// Redo the maxheight on the wrapper
 			$panel.css(max_height_str, 'none');
+			// Where there are placeholders, make sure they take up vertical space
+			$placeholders = $panel.find(placeholder_selector_str).html('&nbsp;');
 			$panel.parent().css(max_height_str, $panel.outerHeight());
+			$placeholders.html('');
 			$panel.css(max_height_str, '');
 
 		});
