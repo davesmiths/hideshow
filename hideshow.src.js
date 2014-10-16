@@ -4,6 +4,7 @@
 	'use strict';
 
 	var resized,
+		prepareTransition,
 		max_height_str = 'max-height',
 		overflow_str = 'overflow',
 		hideshow_str = 'hideshow',
@@ -29,8 +30,14 @@
 		'MozTransition':'transitionend',
 		'WebkitTransition':'webkitTransitionEnd'
 	}
+//el.click = 'return;';
+console.log(el.style.transitionend);
+console.log(el.style.bob);
 
-	if (el['ontransitionend') || el['ontransitionend')
+
+	if (('ontransitionend' in el)) {
+		console.log('asd');
+	}
 
 	$.fn.hideshow = function(o) {
 
@@ -126,7 +133,7 @@
 				// If no toggles for the panel were found, insert
 				// a show/hide toggle before the panel
 				if ($toggles === undefined || $toggles.length === 0) {
-					
+
 					if ($panel.is('[data-hideshow-before]')) {
 						insert_fn_str = 'insertBefore';
 					}
@@ -152,6 +159,15 @@
 					// If the panel is currently hidden, change each toggle
 					// to use the show HTML or temporarily remove the toggle
 					if ($panel.data(hide_data_str)) {
+
+						// Update the panel
+						$panel.data(hide_data_str, false).removeClass(hide_data_str).prepareTransition({
+							callback: function() {
+
+								console.log('done a');
+							}
+						}).addClass(show_data_str);
+
 						$toggles.each(function() {
 
 							var $toggle = $(this),
@@ -170,15 +186,16 @@
 							}
 
 						});
-
-						// Update the panel
-						$panel.data(hide_data_str, false).removeClass(hide_data_str).addClass(show_data_str);
-
 					}
 					// Otherwise change each toggle to use the hide HTML
 					// or temporarily remove the toggle
 					else {
 
+						$panel.data(hide_data_str, true).prepareTransition({
+							callback: function() {
+								console.log('done b');
+							}
+						}).removeClass(show_data_str).addClass(hide_data_str);
 						$toggles.each(function() {
 
 							var $toggle = $(this),
@@ -196,7 +213,6 @@
 							}
 
 						});
-						$panel.data(hide_data_str, true).removeClass(show_data_str).addClass(hide_data_str);
 					}
 
 					return false;
@@ -237,5 +253,35 @@
 		return this;
 
 	};
+	// Super-awesome thanks to Snook
+	// https://github.com/snookca/prepareTransition/blob/master/preparetransition.js
+	// Modified a bit to suit hideshow needs
+	prepareTransition = function(o){
+		return this.each(function(){
+			var $el = $(this),
+				cl = ["transition-duration", "-moz-transition-duration", "-webkit-transition-duration", "-o-transition-duration"],
+				duration = 0,
+				callback
+			;
+			o = o || {};
+			callback = o.callback || function() {};
 
+			// check the various CSS properties to see if a duration has been set
+			$.each(cl, function(idx, itm){
+				duration || (duration = parseFloat($el.css(itm)));
+			});
+
+			// if I have a duration then add the class
+			if (duration > 0) {
+
+				// remove the transition class upon completion
+				$el.one('TransitionEnd webkitTransitionEnd transitionend oTransitionEnd', function(){
+					$el.removeClass('is-transitioning');
+					callback();
+				});
+				$el.addClass('is-transitioning');
+				$el[0].offsetWidth; // check offsetWidth to force the style rendering
+			};
+		});
+	};
 }(jQuery));
