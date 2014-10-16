@@ -20,6 +20,17 @@
 		hsIDCount = 0
 	;
 
+	var el = document.createElement('fakeelement');
+
+	var transitions = {
+		'transition':'transitionend',
+		'OTransition':'oTransitionEnd',
+		'MozTransition':'transitionend',
+		'WebkitTransition':'webkitTransitionEnd'
+	}
+
+	if (el['ontransitionend') || el['ontransitionend')
+
 	$.fn.hideshow = function(o) {
 
 		var $this = $(this),
