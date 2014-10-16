@@ -76,3 +76,9 @@ $(function() {
 ```
 
 Created 2014 October 10
+
+Todos
+-----
+- [] Apply panel display CSS to panelwrap
+
+[//]: # 2014 October 16 Thought about adding data-hideshow-chars, data-hideshow-words, data-hideshow-paragraphs, data-hideshow-lines for a generated toggle

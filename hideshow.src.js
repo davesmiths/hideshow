@@ -17,6 +17,7 @@
 		show_selector_str = '[data-'+show_data_str+']',
 		toggle_wrap_selector_str = '[data-'+toggle_wrap_data_str+']',
 		placeholder_selector_str = '[data-'+placeholder_data_str + ']',
+		insert_fn_str = 'insertAfter',
 		hsIDCount = 0
 	;
 
@@ -125,12 +126,13 @@
 				// If no toggles for the panel were found, insert
 				// a show/hide toggle before the panel
 				if ($toggles === undefined || $toggles.length === 0) {
+					
 					if ($panel.is('[data-hideshow-before]')) {
-						$toggles = $(generatedToggleHTML).insertBefore($panelWrap).wrapAll(generatedToggleWrapHTML).data(hideshow_str+'-for', hideshowID);
+						insert_fn_str = 'insertBefore';
 					}
-					else {
-						$toggles = $(generatedToggleHTML).insertAfter($panelWrap).wrapAll(generatedToggleWrapHTML).data(hideshow_str+'-for', hideshowID);
-					}
+
+					$toggles = $(generatedToggleHTML)[insert_fn_str]($panelWrap).wrapAll(generatedToggleWrapHTML).data(hideshow_str+'-for', hideshowID);
+
 					if (!$panel.is(show_selector_str) && !$panel.is(hide_selector_str)) {
 						$toggles.data(show_data_str,showToggleHTML).data(hide_data_str, hideToggleHTML);
 					}
