@@ -22,23 +22,6 @@
 		hsIDCount = 0
 	;
 
-	var el = document.createElement('fakeelement');
-
-	var transitions = {
-		'transition':'transitionend',
-		'OTransition':'oTransitionEnd',
-		'MozTransition':'transitionend',
-		'WebkitTransition':'webkitTransitionEnd'
-	}
-//el.click = 'return;';
-console.log(el.style.transitionend);
-console.log(el.style.bob);
-
-
-	if (('ontransitionend' in el)) {
-		console.log('asd');
-	}
-
 	$.fn.hideshow = function(o) {
 
 		var $this = $(this),
@@ -80,9 +63,15 @@ console.log(el.style.bob);
 				// Wrap the panel, capture the panel height with margins uncollapsed
 				// and set its max-height to the panel height
 				$panelWrap = $panel.wrap('<'+panelWrapTag+' class="'+hideshow_str+'-wrap"></'+panelWrapTag+'>').parent();
-				$panelWrap.css(overflow_str,'hidden');
+//var panelmarginoverflowtop = $panel.offset().top;
+
+//console.log($panel, $panel.offset(),$panelWrap.outerHeight(true));
+				//$panelWrap.css(overflow_str,'hidden');
+//panelmarginoverflowtop = $panel.offset().top - panelmarginoverflowtop;
+//var panelmarginoverflowbottom = $panelWrap.outerHeight() - $panel.outerHeight() - panelmarginoverflowtop;
+//console.log(panelmarginoverflowtop, panelmarginoverflowbottom);
 				$panelWrap.css(max_height_str, $panelWrap.outerHeight());
-				$panelWrap.css(overflow_str,'');
+				//$panelWrap.css(overflow_str,'');
 
 				// Add a ready class to the panel
 				$panel.data(hide_data_str, true).addClass(hideshow_str+'-ready');
@@ -154,34 +143,20 @@ console.log(el.style.bob);
 				}
 
 				$panel.on('show', function() {
-					console.log('show');
-					$panel.off('hidden');
-					$panel.data(hide_data_str, false).removeClass(hide_data_str + ' hideshow-hidden');
-					$panel.addClass('hideshow-showing');
-					$panel.addClass(show_data_str);
-					handleTransitions.call($panel, function() {
-						$panel.removeClass('hideshow-showing');
-						$panel.trigger('showed');
-					});
-				});
-				$panel.on('showed', function() {
-					console.log('showed');
-					$panel.removeClass(show_data_str).addClass('hideshow-showed');
+					//console.log('show');
+					$panel.data(hide_data_str, false);
+					$panel.addClass('hideshow-intransition');
+					handleTransitions($panel, function() {
+						$panel.removeClass('hideshow-intransition');
+					}).removeClass(hide_data_str).addClass(show_data_str);
 				});
 				$panel.on('hide', function() {
-					console.log('hide');
-					$panel.off('showed');
-					$panel.data(hide_data_str, true).removeClass(show_data_str + ' hideshow-showed');
-					$panel.addClass('istrans');
-					$panel.addClass(hide_data_str);
-					handleTransitions.call($panel, function() {
-						$panel.trigger('hidden');
-						$panel.removeClass('istrans');
-					});
-				});
-				$panel.on('hidden', function() {
-					console.log('hidden');
-					$panel.removeClass(hide_data_str).addClass('hideshow-hidden');
+					//console.log('hide');
+					$panel.data(hide_data_str, true);
+					$panel.addClass('hideshow-intransition');
+					handleTransitions($panel, function() {
+						$panel.removeClass('hideshow-intransition');
+					}).removeClass(show_data_str).addClass(hide_data_str);
 				});
 
 				// Handle toggle click events
@@ -279,7 +254,7 @@ console.log(el.style.bob);
 	// Super-awesome thanks to Snook
 	// https://github.com/snookca/prepareTransition/blob/master/preparetransition.js
 	// Modified a bit to suit hideshow needs
-	handleTransitions = function(callback){
+	handleTransitions = function($els, callback){
 
 		var cl = ["transition-duration", "-moz-transition-duration", "-webkit-transition-duration", "-o-transition-duration"],
 			clLength = 4,
@@ -287,7 +262,7 @@ console.log(el.style.bob);
 			i
 		;
 
-		return this.each(function() {
+		return $els.each(function() {
 
 			var $el = $(this);
 
@@ -302,7 +277,7 @@ console.log(el.style.bob);
 			if (duration > 0) {
 				// remove the transition class upon completion
 				$el.one('TransitionEnd webkitTransitionEnd transitionend oTransitionEnd', callback);
-				//$el[0].offsetWidth;
+				$el[0].offsetWidth;
 				// check offsetWidth to force the style rendering
 			}
 			else {
