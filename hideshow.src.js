@@ -5,20 +5,32 @@
 
 	var resized,
 		handleTransitions,
+
+		hideshow_str = 'hideshow',
+		hideshow_selector_str = '[data-'+hideshow_str+']',
+
 		max_height_str = 'max-height',
 		overflow_str = 'overflow',
-		hideshow_str = 'hideshow',
-		toggle_wrap_data_str = hideshow_str + '-toggle-wrap',
+
 		detached_hideshow_str = hideshow_str + '-detached',
+
 		hide_data_str = hideshow_str + '-hide',
-		show_data_str = hideshow_str + '-show',
-		placeholder_data_str = hideshow_str + '-placeholder',
-		hideshow_selector_str = '[data-'+hideshow_str+']',
+		hide_class_str_default = hide_data_str,
 		hide_selector_str = '[data-'+hide_data_str+']',
+
+		show_data_str = hideshow_str + '-show',
+		show_class_str_default = show_data_str,
 		show_selector_str = '[data-'+show_data_str+']',
-		toggle_wrap_selector_str = '[data-'+toggle_wrap_data_str+']',
+
+		intransition_class_str_default = hideshow_str + '-intransition',
+		placeholder_data_str = hideshow_str + '-placeholder',
 		placeholder_selector_str = '[data-'+placeholder_data_str + ']',
+
 		insert_fn_str = 'insertAfter',
+
+		ready_class_str_default = hideshow_str+'-ready',
+		wrap_class_str_default = hideshow_str+'-wrap',
+
 		hsIDCount = 0
 	;
 
@@ -26,8 +38,7 @@
 
 		var $this = $(this),
 			showToggleHTMLDefault = o && o.show ? o.show : 'Show more',
-			hideToggleHTMLDefault = o && o.hide ? o.hide : 'Show less',
-			generatedToggleWrapHTMLDefault = o && o.toggleWrap ? o.toggleWrap : '<p></p>'
+			hideToggleHTMLDefault = o && o.hide ? o.hide : 'Show less'
 		;
 
 		if (o === 'resized') {
@@ -41,40 +52,40 @@
 				showToggleHTML = $panel.data(show_data_str) || showToggleHTMLDefault,
 				hideToggleHTML = $panel.data(hide_data_str) || hideToggleHTMLDefault,
 				generatedToggleHTML = '<a href="">' + showToggleHTML + '</a>',
-				generatedToggleWrapHTML = '',
 				panelIsBlock = $panel.css('display') === 'block',
 				hideshowID = $panel.data(hideshow_str),
 				$toggles,
 				$panelWrap,
-				panelWrapTag = panelIsBlock ? 'div' : 'span'
+				panelWrapTag = panelIsBlock ? 'div' : 'span',
+				show_class_str = show_class_str_default,
+				intransition_class_str = intransition_class_str_default,
+				hide_class_str = hide_class_str_default,
+				ready_class_str = ready_class_str_default,
+				wrap_class_str = wrap_class_str_default,
+				extendClass = $panel.data('hideshow-class') ? '-' + $panel.data('hideshow-class') : ''
 			;
-			if (panelIsBlock) {
-				generatedToggleWrapHTML = $panel.data(toggle_wrap_data_str) || generatedToggleWrapHTMLDefault;
+			if (!extendClass && !panelIsBlock) {
+				extendClass = '-inline';
 			}
+
+			show_class_str += extendClass;
+			intransition_class_str += extendClass;
+			hide_class_str += extendClass;
+			ready_class_str += extendClass;
+			wrap_class_str += extendClass;
+
 
 			// Only apply hideshow if it hasn't been done previously
 			// This allows multiple calls to $('[data-hideshow]').hideshow(); and keeps things good
-			if ($panel.hasClass(hideshow_str+'-ready') === false) {
-
-				if ($panel.is(toggle_wrap_selector_str) && !$panel.data(toggle_wrap_data_str)) {
-					generatedToggleWrapHTML = '';
-				}
+			if ($panel.hasClass(ready_class_str) === false && $panel.hasClass(ready_class_str_default) === false) {
 
 				// Wrap the panel, capture the panel height with margins uncollapsed
 				// and set its max-height to the panel height
-				$panelWrap = $panel.wrap('<'+panelWrapTag+' class="'+hideshow_str+'-wrap"></'+panelWrapTag+'>').parent();
-//var panelmarginoverflowtop = $panel.offset().top;
-
-//console.log($panel, $panel.offset(),$panelWrap.outerHeight(true));
-				//$panelWrap.css(overflow_str,'hidden');
-//panelmarginoverflowtop = $panel.offset().top - panelmarginoverflowtop;
-//var panelmarginoverflowbottom = $panelWrap.outerHeight() - $panel.outerHeight() - panelmarginoverflowtop;
-//console.log(panelmarginoverflowtop, panelmarginoverflowbottom);
+				$panelWrap = $panel.wrap('<'+panelWrapTag+' class="'+wrap_class_str+'"></'+panelWrapTag+'>').parent();
 				$panelWrap.css(max_height_str, $panelWrap.outerHeight());
-				//$panelWrap.css(overflow_str,'');
 
 				// Add a ready class to the panel
-				$panel.data(hide_data_str, true).addClass(hideshow_str+'-ready');
+				$panel.data(hide_data_str, true).addClass(ready_class_str);
 
 				// If the panel has an id
 				//		Check for toggles for the panel, set their HTML
@@ -127,7 +138,7 @@
 						insert_fn_str = 'insertBefore';
 					}
 
-					$toggles = $(generatedToggleHTML)[insert_fn_str]($panelWrap).wrapAll(generatedToggleWrapHTML).data(hideshow_str+'-for', hideshowID);
+					$toggles = $(generatedToggleHTML)[insert_fn_str]($panelWrap).data(hideshow_str+'-for', hideshowID);
 
 					if (!$panel.is(show_selector_str) && !$panel.is(hide_selector_str)) {
 						$toggles.data(show_data_str,showToggleHTML).data(hide_data_str, hideToggleHTML);
@@ -145,18 +156,18 @@
 				$panel.on('show', function() {
 					//console.log('show');
 					$panel.data(hide_data_str, false);
-					$panel.addClass('hideshow-intransition');
+					$panel.addClass(intransition_class_str);
 					handleTransitions($panel, function() {
-						$panel.removeClass('hideshow-intransition');
-					}).removeClass(hide_data_str).addClass(show_data_str);
+						$panel.removeClass(intransition_class_str);
+					}).removeClass(hide_class_str).addClass(show_class_str);
 				});
 				$panel.on('hide', function() {
 					//console.log('hide');
 					$panel.data(hide_data_str, true);
-					$panel.addClass('hideshow-intransition');
+					$panel.addClass(intransition_class_str);
 					handleTransitions($panel, function() {
-						$panel.removeClass('hideshow-intransition');
-					}).removeClass(show_data_str).addClass(hide_data_str);
+						$panel.removeClass(intransition_class_str);
+					}).removeClass(show_class_str).addClass(hide_class_str);
 				});
 
 				// Handle toggle click events
@@ -234,8 +245,8 @@
 
 		$(this).each(function() {
 
-			var $panel = $(this)
-				,$placeholders
+			var $panel = $(this),
+				$placeholders
 			;
 
 			// Redo the maxheight on the wrapper
