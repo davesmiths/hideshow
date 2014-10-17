@@ -53,21 +53,17 @@
 
 
         /* CSS animations */
-        .t2 [data-hideshow].hideshow-ready {max-height:0;overflow:hidden;opacity:1;margin:-1em 0 0 0;}
-        .t2 [data-hideshow].hideshow-show {max-height:inherit;opacity:1;margin:-1em 0;
-            -webkit-transition: all 1s ease-out;
-            -moz-transition: all 1s ease-out;
-            -ms-transition: all 1s ease-out;
-            -o-transition: all 1s ease-out;
-            transition: all 1s ease-out;
+        .t2 [data-hideshow].hideshow-ready {max-height:0;overflow:hidden;opacity:1;margin:-1em 0 0 0;display:none;
+            -webkit-transition: max-height 1s ease-out, opacity 1s ease-out;
+            -moz-transition: max-height 1s ease-out, opacity 1s ease-out;
+            -ms-transition: max-height 1s ease-out, opacity 1s ease-out;
+            -o-transition: max-height 1s ease-out, opacity 1s ease-out;
+            transition: max-height 1s ease-out, opacity 1s ease-out;
         }
-        .t2 [data-hideshow].hideshow-hide {max-height:0;opacity:0;
-            -webkit-transition: all 1s ease-out;
-            -moz-transition: all 1s ease-out;
-            -ms-transition: all 1s ease-out;
-            -o-transition: all 1s ease-out;
-            transition: all 1s ease-out;
-        }
+        .t2 [data-hideshow].hideshow-show {max-height:inherit;opacity:1;margin:-1em 0;display:block;}
+        .t2 [data-hideshow].hideshow-showed {max-height:inherit;opacity:1;margin:-1em 0;}
+        .t2 [data-hideshow].hideshow-hide {max-height:0;opacity:0;}
+        .t2 [data-hideshow].hideshow-hidden {display:none;}
 
 
 

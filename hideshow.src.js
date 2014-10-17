@@ -4,7 +4,7 @@
 	'use strict';
 
 	var resized,
-		prepareTransition,
+		handleTransitions,
 		max_height_str = 'max-height',
 		overflow_str = 'overflow',
 		hideshow_str = 'hideshow',
@@ -153,6 +153,37 @@ console.log(el.style.bob);
 					}
 				}
 
+				$panel.on('show', function() {
+					console.log('show');
+					$panel.off('hidden');
+					$panel.data(hide_data_str, false).removeClass(hide_data_str + ' hideshow-hidden');
+					$panel.addClass('hideshow-showing');
+					$panel.addClass(show_data_str);
+					handleTransitions.call($panel, function() {
+						$panel.removeClass('hideshow-showing');
+						$panel.trigger('showed');
+					});
+				});
+				$panel.on('showed', function() {
+					console.log('showed');
+					$panel.removeClass(show_data_str).addClass('hideshow-showed');
+				});
+				$panel.on('hide', function() {
+					console.log('hide');
+					$panel.off('showed');
+					$panel.data(hide_data_str, true).removeClass(show_data_str + ' hideshow-showed');
+					$panel.addClass('istrans');
+					$panel.addClass(hide_data_str);
+					handleTransitions.call($panel, function() {
+						$panel.trigger('hidden');
+						$panel.removeClass('istrans');
+					});
+				});
+				$panel.on('hidden', function() {
+					console.log('hidden');
+					$panel.removeClass(hide_data_str).addClass('hideshow-hidden');
+				});
+
 				// Handle toggle click events
 				$toggles.on('click', function() {
 
@@ -160,13 +191,7 @@ console.log(el.style.bob);
 					// to use the show HTML or temporarily remove the toggle
 					if ($panel.data(hide_data_str)) {
 
-						// Update the panel
-						$panel.data(hide_data_str, false).removeClass(hide_data_str).prepareTransition({
-							callback: function() {
-
-								console.log('done a');
-							}
-						}).addClass(show_data_str);
+						$panel.trigger('show');
 
 						$toggles.each(function() {
 
@@ -186,16 +211,14 @@ console.log(el.style.bob);
 							}
 
 						});
+
 					}
 					// Otherwise change each toggle to use the hide HTML
 					// or temporarily remove the toggle
 					else {
 
-						$panel.data(hide_data_str, true).prepareTransition({
-							callback: function() {
-								console.log('done b');
-							}
-						}).removeClass(show_data_str).addClass(hide_data_str);
+						$panel.trigger('hide');
+
 						$toggles.each(function() {
 
 							var $toggle = $(this),
@@ -256,32 +279,35 @@ console.log(el.style.bob);
 	// Super-awesome thanks to Snook
 	// https://github.com/snookca/prepareTransition/blob/master/preparetransition.js
 	// Modified a bit to suit hideshow needs
-	prepareTransition = function(o){
-		return this.each(function(){
-			var $el = $(this),
-				cl = ["transition-duration", "-moz-transition-duration", "-webkit-transition-duration", "-o-transition-duration"],
-				duration = 0,
-				callback
-			;
-			o = o || {};
-			callback = o.callback || function() {};
+	handleTransitions = function(callback){
+
+		var cl = ["transition-duration", "-moz-transition-duration", "-webkit-transition-duration", "-o-transition-duration"],
+			clLength = 4,
+			duration,
+			i
+		;
+
+		return this.each(function() {
+
+			var $el = $(this);
+
+			duration = 0;
 
 			// check the various CSS properties to see if a duration has been set
-			$.each(cl, function(idx, itm){
-				duration || (duration = parseFloat($el.css(itm)));
-			});
+			for (i = 0; i < clLength; i++) {
+				duration = duration || (duration = parseFloat($el.css(cl[i])));
+			}
 
 			// if I have a duration then add the class
 			if (duration > 0) {
-
 				// remove the transition class upon completion
-				$el.one('TransitionEnd webkitTransitionEnd transitionend oTransitionEnd', function(){
-					$el.removeClass('is-transitioning');
-					callback();
-				});
-				$el.addClass('is-transitioning');
-				$el[0].offsetWidth; // check offsetWidth to force the style rendering
-			};
+				$el.one('TransitionEnd webkitTransitionEnd transitionend oTransitionEnd', callback);
+				//$el[0].offsetWidth;
+				// check offsetWidth to force the style rendering
+			}
+			else {
+				callback();
+			}
 		});
 	};
 }(jQuery));
